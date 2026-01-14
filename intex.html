@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Avengers Secret Wars Countdown</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Orbitron font for futuristic MCU vibe -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+
+<style>
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: black;
+}
+
+body {
+  background: url("https://i.ibb.co/39F95CBC/images.jpg") center/contain no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.countdown {
+  margin-bottom: 9vh;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.2rem;
+  letter-spacing: 4px;
+
+  /* White + Green cinematic glow blend */
+  color: #ffffff;
+  text-shadow:
+    0 0 8px rgba(0, 255, 150, 0.6),
+    0 0 16px rgba(0, 200, 100, 0.45),
+    0 0 24px rgba(0, 150, 80, 0.3);
+}
+
+audio {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .countdown {
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+  }
+}
+</style>
+</head>
+
+<body onclick="enableSound()">
+
+<div class="countdown" id="timer">
+  00 MONTH : 00 DAYS : 00 HOURS : 00 MIN : 00 SEC
+</div>
+
+<audio id="tick" src="tick.mp3" preload="auto"></audio>
+
+<script>
+const targetDate = new Date("December 17, 2027 00:00:00").getTime();
+let soundEnabled = false;
+
+function enableSound() {
+  soundEnabled = true;
+}
+
+function updateCountdown() {
+  const now = new Date().getTime();
+  let diff = targetDate - now;
+  if(diff < 0) diff = 0;
+
+  // Months approx (30.44 days per month)
+  const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.44));
+  diff -= months * 1000 * 60 * 60 * 24 * 30.44;
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  diff -= days * 1000 * 60 * 60 * 24;
+
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  diff -= hours * 1000 * 60 * 60;
+
+  const minutes = Math.floor(diff / (1000 * 60));
+  diff -= minutes * 1000 * 60;
+
+  const seconds = Math.floor(diff / 1000);
+
+  document.getElementById("timer").textContent =
+    `${String(months).padStart(2,"0")} MONTH : ${String(days).padStart(2,"0")} DAYS : ${String(hours).padStart(2,"0")} HOURS : ${String(minutes).padStart(2,"0")} MIN : ${String(seconds).padStart(2,"0")} SEC`;
+
+  if(soundEnabled) {
+    const t = document.getElementById("tick");
+    t.currentTime = 0;
+    t.play();
+  }
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+</html>
